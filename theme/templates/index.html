@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <span class="hero-badge">DevOps &amp; Cloud Infrastructure</span>
+            <h1>Ship Faster.<br>Sleep Better.</h1>
+            <p class="hero-subtitle">I help startups and growing teams build reliable, scalable infrastructure — from Kubernetes clusters to CI/CD pipelines to fully observable production systems.</p>
+            <div class="hero-cta">
+                <a href="{{ SITEURL }}/book/" class="btn btn-primary btn-lg">Book a Free Discovery Call</a>
+                <a href="{{ SITEURL }}/services/" class="btn btn-outline btn-lg">View Services &amp; Pricing</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Projects Delivered</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">Uptime Achieved</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">10+</span>
+                    <span class="stat-label">Years Experience</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Bar -->
+<section class="trust-bar">
+    <div class="container">
+        <p class="trust-label">Technologies I Work With</p>
+        <div class="trust-logos">
+            <span>Kubernetes</span>
+            <span>AWS</span>
+            <span>GCP</span>
+            <span>Terraform</span>
+            <span>Docker</span>
+            <span>GitLab</span>
+            <span>Prometheus</span>
+            <span>ArgoCD</span>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Services -->
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Popular Services</h2>
+            <p>Fixed-price packages so you know exactly what you're getting — and what you're paying.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card featured">
+                <div class="service-badge">Most Popular</div>
+                <div class="service-icon">&#9784;</div>
+                <h3>Kubernetes Cluster Audit</h3>
+                <p>Comprehensive review of your K8s cluster — security, resource allocation, networking, RBAC policies, and best-practice compliance.</p>
+                <div class="service-price">$500</div>
+                <ul class="service-features">
+                    <li>Security posture assessment</li>
+                    <li>Resource optimization report</li>
+                    <li>RBAC & network policy review</li>
+                    <li>Written remediation plan</li>
+                </ul>
+                <a href="{{ SITEURL }}/book/" class="btn btn-primary">Book This Service</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">&#9654;</div>
+                <h3>GitLab CI/CD Setup</h3>
+                <p>End-to-end pipeline setup — build, test, scan, and deploy to staging and production with confidence.</p>
+                <div class="service-price">$1,000</div>
+                <ul class="service-features">
+                    <li>Multi-stage pipeline</li>
+                    <li>Automated testing integration</li>
+                    <li>Container registry setup</li>
+                    <li>Deployment to K8s or VMs</li>
+                </ul>
+                <a href="{{ SITEURL }}/book/" class="btn btn-outline">Book This Service</a>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">&#128202;</div>
+                <h3>Monitoring Package</h3>
+                <p>Prometheus + Grafana stack with custom dashboards, alerting rules, and on-call integration.</p>
+                <div class="service-price">$800</div>
+                <ul class="service-features">
+                    <li>Prometheus + Grafana deploy</li>
+                    <li>Custom dashboards</li>
+                    <li>Alert rules & routing</li>
+                    <li>PagerDuty / Slack integration</li>
+                </ul>
+                <a href="{{ SITEURL }}/book/" class="btn btn-outline">Book This Service</a>
+            </div>
+        </div>
+        <div class="section-cta">
+            <a href="{{ SITEURL }}/services/" class="btn btn-outline btn-lg">See All Services &amp; Pricing &rarr;</a>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-header">
+            <h2>How It Works</h2>
+            <p>Simple, transparent process from first call to delivered infrastructure.</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Discovery Call</h3>
+                <p>We hop on a free 30-minute call. You tell me what's broken, what's slow, or what you need built. I ask the right questions.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Proposal & Quote</h3>
+                <p>Within 48 hours you get a clear scope document with fixed pricing. No surprises, no hourly billing games.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Build & Deliver</h3>
+                <p>I build it, document it, and hand it over. You get working infrastructure, runbooks, and a walkthrough session.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>Support</h3>
+                <p>30 days of post-delivery support included. Questions, tweaks, fire drills — I've got your back.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section cta-section">
+    <div class="container">
+        <div class="cta-box">
+            <h2>Ready to Fix Your Infrastructure?</h2>
+            <p>Book a free 30-minute discovery call. No pitch deck, no sales pressure — just an honest conversation about your infra needs.</p>
+            <a href="{{ SITEURL }}/book/" class="btn btn-primary btn-lg">Schedule Your Free Call</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

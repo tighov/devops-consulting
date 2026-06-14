@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}Expert DevOps consulting — Kubernetes, CI/CD, monitoring, infrastructure automation, and cloud architecture.{% endblock %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ SITEURL }}/theme/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="{{ SITEURL }}/" class="logo">
+                <span class="logo-icon">&#9881;</span> {{ SITENAME }}
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                {% for title, link in MENUITEMS %}
+                <li><a href="{{ SITEURL }}{{ link }}" {% if title == 'Book Now' %}class="btn btn-nav"{% endif %}>{{ title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3><span class="logo-icon">&#9881;</span> {{ SITENAME }}</h3>
+                    <p>Production-grade infrastructure, delivered by an engineer who's been in the trenches.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="{{ SITEURL }}/services/">Kubernetes</a></li>
+                        <li><a href="{{ SITEURL }}/services/">CI/CD Pipelines</a></li>
+                        <li><a href="{{ SITEURL }}/services/">Monitoring</a></li>
+                        <li><a href="{{ SITEURL }}/services/">Cloud Architecture</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="{{ SITEURL }}/about/">About</a></li>
+                        <li><a href="{{ SITEURL }}/services/">Pricing</a></li>
+                        <li><a href="{{ SITEURL }}/book/">Book a Call</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact</h4>
+                    <p>hello@yourdomain.com</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub">GH</a>
+                        <a href="#" aria-label="LinkedIn">LI</a>
+                        <a href="#" aria-label="Twitter">TW</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; {{ COPYRIGHT_YEAR }} {{ SITENAME }}. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>var LAMBDA_ENDPOINT = "{{ LAMBDA_ENDPOINT }}";</script>
+    <script src="{{ SITEURL }}/theme/js/main.js"></script>
+</body>
+</html>

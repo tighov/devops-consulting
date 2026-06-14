@@ -1,0 +1,103 @@
+name: Deploy to AWS S3
+on:
+  push:
+    branches:
+      - main
+env:
+  PYTHON_VERSION: '3.13'
+  AWS_REGION: 'us-east-1'
+  PELICAN_SETTINGS: 'pelicanconf.py'
+  SITEURL: 'https://www.devops-consulting.example.com'
+  FEED_DOMAIN: 'https://www.devops-consulting.example.com'
+  BUCKET_NAME: 'www.devops-consulting.example.com'
+  OUTPUT_PATH: 'output'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install requirements
+        run: pip install --upgrade pip && pip install pelican markdown
+
+      - name: Build Pelican site
+        run: |
+          pelican content \
+            --settings ${{ env.PELICAN_SETTINGS }} \
+            --extra-settings SITEURL='"${{ env.SITEURL }}"' FEED_DOMAIN='"${{ env.FEED_DOMAIN }}"' \
+            --output ${{ env.OUTPUT_PATH }}
+
+      - name: Upload output folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: outputfolder
+          path: ./${{ env.OUTPUT_PATH }}/
+
+  provision:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.4
+
+      - name: Terraform init and validate
+        run: |
+          make init && \
+          make validate
+
+      - name: Terraform plan
+        run: |
+          make plan
+
+      - name: Terraform apply
+        run: |
+          make apply
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build, provision]
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: outputfolder
+          path: ./${{ env.OUTPUT_PATH }}/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Copy files to S3 bucket
+        run: |
+          aws s3 sync ${{ env.OUTPUT_PATH }}/ s3://${{ env.BUCKET_NAME }}
+
+      - name: CDN Invalidate
+        run: |
+          DIST_ID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Aliases.Items[?contains(@, 'www.${{ env.BUCKET_NAME }}')]].Id" \
+            --output text 2>/dev/null || echo "")
+          if [ -n "$DIST_ID" ] && [ "$DIST_ID" != "None" ]; then
+            aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"
+          else
+            echo "No CloudFront distribution found, skipping invalidation"
+          fi
