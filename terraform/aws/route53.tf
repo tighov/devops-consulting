@@ -2,6 +2,10 @@ resource "aws_route53_zone" "main" {
   name          = var.domain_name
   comment       = "Managed by Terraform Pipeline"
   force_destroy = false
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_route53_record" "root_a" {

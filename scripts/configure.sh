@@ -30,11 +30,36 @@ if [ ${#missing[@]} -gt 0 ]; then
     exit 1
 fi
 
+# ---------- Helper: portable sed -i ----------
+sedi() {
+    if [[ "$OSTYPE" == darwin* ]]; then
+        sed -i '' "$@"
+    else
+        sed -i "$@"
+    fi
+}
+
 # ---------- Derived values ----------
 SITEURL="https://www.${DOMAIN_NAME}"
 LAMBDA_ENDPOINT="https://api.${DOMAIN_NAME}/contact-form"
 BUCKET_NAME="www.${DOMAIN_NAME}"
 TF_STATE_BUCKET="${PROJECT_NAME}-tf"
+
+# ---------- Auto-detect CloudFront distribution ID ----------
+if command -v aws &>/dev/null; then
+    DETECTED_CDN_ID=$(aws cloudfront list-distributions \
+        --query "DistributionList.Items[?Aliases.Items[?@=='www.${DOMAIN_NAME}']].Id | [0]" \
+        --output text 2>/dev/null || echo "")
+    if [ -n "$DETECTED_CDN_ID" ] && [ "$DETECTED_CDN_ID" != "None" ] && [ "$DETECTED_CDN_ID" != "null" ]; then
+        if [ "$CDN_DISTRIBUTION_ID" != "$DETECTED_CDN_ID" ]; then
+            echo "  Auto-detected CDN distribution: $DETECTED_CDN_ID"
+            CDN_DISTRIBUTION_ID="$DETECTED_CDN_ID"
+            sedi "s|^CDN_DISTRIBUTION_ID=.*|CDN_DISTRIBUTION_ID=${CDN_DISTRIBUTION_ID}|" "$CONFIG_FILE"
+            echo "  updated config.env with CDN_DISTRIBUTION_ID=$CDN_DISTRIBUTION_ID"
+            echo ""
+        fi
+    fi
+fi
 
 echo "Configuring project with:"
 echo "  DOMAIN_NAME        = $DOMAIN_NAME"
@@ -48,15 +73,6 @@ echo "  LAMBDA_ENDPOINT    = $LAMBDA_ENDPOINT"
 echo "  BUCKET_NAME        = $BUCKET_NAME"
 echo "  TF_STATE_BUCKET    = $TF_STATE_BUCKET"
 echo ""
-
-# ---------- Helper: portable sed -i ----------
-sedi() {
-    if [[ "$OSTYPE" == darwin* ]]; then
-        sed -i '' "$@"
-    else
-        sed -i "$@"
-    fi
-}
 
 # ---------- pelicanconf.py ----------
 FILE="$BASEDIR/pelicanconf.py"
@@ -175,6 +191,4 @@ echo "Next steps:"
 echo "  1. Run 'make remote-state' to bootstrap Terraform state bucket"
 echo "  2. Run 'make plan' to preview infrastructure changes"
 echo "  3. Run 'make apply' to provision AWS resources"
-echo "  4. After first apply, get the CloudFront distribution ID and update"
-echo "     CDN_DISTRIBUTION_ID in config.env, then run 'make configure' again"
-echo "  5. Push to main branch to trigger GitHub Actions deployment"
+echo "  4. Push to main branch to trigger GitHub Actions deployment"

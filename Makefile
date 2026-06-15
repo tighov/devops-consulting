@@ -72,4 +72,7 @@ apply: init
 remote-state:
 	make -C ./terraform/aws-remote-state/ init validate plan apply
 
-.PHONY: configure html help clean regenerate serve publish s3_upload init plan apply validate remote-state
+fix-ns:
+	$(BASEDIR)/scripts/fix-nameservers.sh $(BASEDIR)/config.env
+
+.PHONY: configure html help clean regenerate serve publish s3_upload init plan apply validate remote-state fix-ns
