@@ -20,7 +20,7 @@ provider "aws" {
   region = var.region
 }
 
-# Configure the ACM Provider (us-east-1 for CloudFront certs)
+# Configure the ACM Provider (must be us-east-1 for CloudFront certs)
 provider "aws" {
   alias  = "acm_provider"
   region = "us-east-1"

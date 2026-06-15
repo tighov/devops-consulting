@@ -8,4 +8,5 @@ module "contact_form" {
   stage_name                               = var.stage_name
   sender_email                             = var.sender_email
   sendto_email                             = var.sendto_email
+  project_name                             = var.project_name
 }

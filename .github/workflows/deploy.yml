@@ -94,7 +94,7 @@ jobs:
       - name: CDN Invalidate
         run: |
           DIST_ID=$(aws cloudfront list-distributions \
-            --query "DistributionList.Items[?Aliases.Items[?contains(@, 'www.${{ env.BUCKET_NAME }}')]].Id" \
+            --query "DistributionList.Items[?Aliases.Items[?contains(@, '${{ env.BUCKET_NAME }}')]].Id" \
             --output text 2>/dev/null || echo "")
           if [ -n "$DIST_ID" ] && [ "$DIST_ID" != "None" ]; then
             aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"

@@ -82,17 +82,45 @@ FILE="$BASEDIR/Makefile"
 sedi "s|^S3_BUCKET=.*|S3_BUCKET=${BUCKET_NAME}|" "$FILE"
 echo "  updated Makefile"
 
-# ---------- terraform/aws/providers.tf ----------
+# ---------- terraform/aws/providers.tf (rewrite to avoid clobbering ACM region) ----------
 FILE="$BASEDIR/terraform/aws/providers.tf"
-sedi "s|bucket       = \".*\"|bucket       = \"${TF_STATE_BUCKET}\"|" "$FILE"
-sedi "s|region       = \".*\"|region       = \"${AWS_REGION}\"|" "$FILE"
+cat > "$FILE" <<EOF
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
+  backend "s3" {
+    bucket       = "${TF_STATE_BUCKET}"
+    key          = "prod.tfstate"
+    region       = "${AWS_REGION}"
+    use_lockfile = true
+    encrypt      = true
+  }
+}
+
+# Configure the AWS Provider
+provider "aws" {
+  region = var.region
+}
+
+# Configure the ACM Provider (must be us-east-1 for CloudFront certs)
+provider "aws" {
+  alias  = "acm_provider"
+  region = "us-east-1"
+}
+EOF
 echo "  updated terraform/aws/providers.tf"
 
 # ---------- terraform/aws/terraform.tfvars ----------
 FILE="$BASEDIR/terraform/aws/terraform.tfvars"
 cat > "$FILE" <<EOF
-domain_name = "${DOMAIN_NAME}"
-region      = "${AWS_REGION}"
+domain_name  = "${DOMAIN_NAME}"
+project_name = "${PROJECT_NAME}"
+region       = "${AWS_REGION}"
 common_tags = {
   Name        = "${PROJECT_NAME}"
   Environment = "prod"
@@ -135,9 +163,9 @@ FILE="$BASEDIR/scripts/invalidate_cdn.sh"
 sedi "s|^CDN_DISTRIBUTION_ID=.*|CDN_DISTRIBUTION_ID=\"${CDN_DISTRIBUTION_ID}\"|" "$FILE"
 echo "  updated scripts/invalidate_cdn.sh"
 
-# ---------- theme/templates/base.html ----------
+# ---------- theme/templates/base.html (match any email in footer <p> tag) ----------
 FILE="$BASEDIR/theme/templates/base.html"
-sedi "s|<p>.*@.*\\.com</p>|<p>${CONTACT_EMAIL}</p>|" "$FILE"
+sedi "s|<p>[^<]*@[^<]*</p>|<p>${CONTACT_EMAIL}</p>|" "$FILE"
 echo "  updated theme/templates/base.html"
 
 echo ""

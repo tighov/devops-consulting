@@ -26,3 +26,8 @@ variable "sendto_email" {
   type        = string
   description = "Email address to receive contact form submissions."
 }
+
+variable "project_name" {
+  type        = string
+  description = "Project name used for AWS resource naming."
+}

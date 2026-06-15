@@ -5,7 +5,7 @@ data "archive_file" "lambda_zip_file" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "devops_consulting_lambda_role"
+  name               = "${replace(var.project_name, "-", "_")}_lambda_role"
   assume_role_policy = file("${path.module}/lambdas/lambda_assume_role_policy.json")
 }
 
@@ -15,7 +15,7 @@ resource "aws_iam_role_policy_attachment" "lambda_exec_role_attachment" {
 }
 
 resource "aws_iam_policy" "lambda_ses_send_email" {
-  name        = "devops-consulting-lambda-ses-send-email"
+  name        = "${var.project_name}-lambda-ses-send-email"
   description = "Allow Lambda to send email via SES"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -38,7 +38,7 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_send_email_attachment" {
 }
 
 resource "aws_lambda_function" "contact_form_lambda_function" {
-  function_name    = "devops_consulting_contact_form"
+  function_name    = "${replace(var.project_name, "-", "_")}_contact_form"
   role             = aws_iam_role.lambda_role.arn
   handler          = "contact_form.lambda_handler"
   runtime          = "python3.13"
