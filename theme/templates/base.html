@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
     <meta name="description" content="{% block description %}Expert DevOps consulting — Kubernetes, CI/CD, monitoring, infrastructure automation, and cloud architecture.{% endblock %}">
+    <link rel="icon" href="{{ SITEURL }}/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="{{ SITEURL }}/favicon.png" type="image/png" sizes="32x32">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ SITEURL }}/theme/css/style.css">
@@ -63,7 +65,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; {{ COPYRIGHT_YEAR }} {{ SITENAME }}. All rights reserved.</p>
+                <p>&copy; {{ COPYRIGHT_YEAR }} {{ SITENAME }}. All rights reserved. Built by <a href="https://tighov.link">tighov.link</a></p>
             </div>
         </div>
     </footer>

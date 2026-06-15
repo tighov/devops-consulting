@@ -32,6 +32,8 @@ ARTICLE_PATHS = []
 STATIC_PATHS = ['images', 'extra']
 EXTRA_PATH_METADATA = {
     'extra/robots.txt': {'path': 'robots.txt'},
+    'extra/favicon.svg': {'path': 'favicon.svg'},
+    'extra/favicon.png': {'path': 'favicon.png'},
 }
 
 DEFAULT_PAGINATION = False
