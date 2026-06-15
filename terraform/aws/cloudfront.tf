@@ -1,7 +1,7 @@
 # CloudFront distribution for www S3 site
 resource "aws_cloudfront_distribution" "www_s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.www_bucket.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.www_bucket_website.website_endpoint
     origin_id   = "S3-www.${var.domain_name}"
 
     custom_origin_config {
@@ -52,7 +52,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.ssl_cert.arn
+    acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.1_2016"
   }
@@ -63,7 +63,7 @@ resource "aws_cloudfront_distribution" "www_s3_distribution" {
 # CloudFront distribution for root domain redirect to www
 resource "aws_cloudfront_distribution" "root_s3_distribution" {
   origin {
-    domain_name = aws_s3_bucket.root_bucket.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.root_bucket_website.website_endpoint
     origin_id   = "S3-.${var.domain_name}"
     custom_origin_config {
       http_port              = 80
@@ -106,7 +106,7 @@ resource "aws_cloudfront_distribution" "root_s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.ssl_cert.arn
+    acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.1_2016"
   }

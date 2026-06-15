@@ -45,8 +45,9 @@ resource "aws_s3_bucket_website_configuration" "www_bucket_website" {
 }
 
 resource "aws_s3_bucket_policy" "www_bucket_policy" {
-  bucket = aws_s3_bucket.www_bucket.id
-  policy = templatefile("templates/s3-policy.json", { bucket = "www.${var.domain_name}" })
+  bucket     = aws_s3_bucket.www_bucket.id
+  policy     = templatefile("templates/s3-policy.json", { bucket = "www.${var.domain_name}" })
+  depends_on = [aws_s3_bucket_public_access_block.www_bucket]
 }
 
 # S3 bucket for redirect non-www to www
@@ -81,6 +82,7 @@ resource "aws_s3_bucket_website_configuration" "root_bucket_website" {
 }
 
 resource "aws_s3_bucket_policy" "root_bucket_policy" {
-  bucket = aws_s3_bucket.root_bucket.id
-  policy = templatefile("templates/s3-policy.json", { bucket = var.domain_name })
+  bucket     = aws_s3_bucket.root_bucket.id
+  policy     = templatefile("templates/s3-policy.json", { bucket = var.domain_name })
+  depends_on = [aws_s3_bucket_public_access_block.root_bucket]
 }

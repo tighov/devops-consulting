@@ -25,7 +25,6 @@ resource "aws_api_gateway_integration" "contact_form_lambda_integration" {
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   rest_api_id = var.rest_api.id
-  stage_name  = var.stage_name
 
   triggers = {
     redeployment = sha1(jsonencode([
@@ -43,6 +42,12 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.contact_form_lambda_integration,
     aws_api_gateway_integration.cors_options_integration,
   ]
+}
+
+resource "aws_api_gateway_stage" "api_stage" {
+  deployment_id = aws_api_gateway_deployment.api_deployment.id
+  rest_api_id   = var.rest_api.id
+  stage_name    = var.stage_name
 }
 
 resource "aws_lambda_permission" "apigw_lambda_permission" {
@@ -85,6 +90,11 @@ resource "aws_api_gateway_integration_response" "post_integration_response" {
 }
 
 output "invoke_url" {
-  value       = aws_api_gateway_deployment.api_deployment.invoke_url
+  value       = aws_api_gateway_stage.api_stage.invoke_url
   description = "The invoke URL for the contact form API"
+}
+
+output "stage_name" {
+  value       = aws_api_gateway_stage.api_stage.stage_name
+  description = "The stage name for the API Gateway deployment"
 }

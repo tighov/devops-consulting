@@ -42,5 +42,5 @@ resource "aws_route53_record" "api_a" {
 
 resource "aws_api_gateway_domain_name" "api_custom_domain" {
   domain_name     = "api.${var.domain_name}"
-  certificate_arn = aws_acm_certificate.ssl_cert.arn
+  certificate_arn = aws_acm_certificate_validation.cert_validation.certificate_arn
 }

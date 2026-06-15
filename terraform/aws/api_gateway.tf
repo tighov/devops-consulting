@@ -9,6 +9,6 @@ resource "aws_api_gateway_rest_api" "rest_api" {
 
 resource "aws_api_gateway_base_path_mapping" "api_mapping" {
   api_id      = aws_api_gateway_rest_api.rest_api.id
-  stage_name  = var.stage_name
+  stage_name  = module.contact_form.stage_name
   domain_name = aws_api_gateway_domain_name.api_custom_domain.domain_name
 }
