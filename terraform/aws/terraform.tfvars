@@ -7,5 +7,5 @@ common_tags = {
   Owner       = "tigran"
 }
 stage_name   = "prod"
-sender_email = "hello@devops-consulting.link"
-sendto_email = "hello@devops-consulting.link"
+sender_email = "email@thetigran.com"
+sendto_email = "email@thetigran.com"
