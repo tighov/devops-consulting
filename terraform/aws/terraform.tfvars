@@ -1,4 +1,4 @@
-domain_name = "devops-consulting.example.com"
+domain_name = "devops-consulting.link"
 region      = "us-east-1"
 common_tags = {
   Name        = "devops-consulting"
@@ -6,5 +6,5 @@ common_tags = {
   Owner       = "tigran"
 }
 stage_name   = "prod"
-sender_email = "hello@devops-consulting.example.com"
-sendto_email = "hello@devops-consulting.example.com"
+sender_email = "hello@devops-consulting.link"
+sendto_email = "hello@devops-consulting.link"

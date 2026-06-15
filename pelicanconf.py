@@ -9,7 +9,7 @@ TIMEZONE = 'UTC'
 DEFAULT_LANG = 'en'
 
 # Contact form API endpoint (set to your deployed API Gateway URL)
-LAMBDA_ENDPOINT = 'https://api.devops-consulting.example.com/contact-form'
+LAMBDA_ENDPOINT = 'https://api.devops-consulting.link/contact-form'
 COPYRIGHT_YEAR = '2025'
 
 # Disable feeds for development

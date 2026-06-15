@@ -7,9 +7,9 @@ env:
   PYTHON_VERSION: '3.13'
   AWS_REGION: 'us-east-1'
   PELICAN_SETTINGS: 'pelicanconf.py'
-  SITEURL: 'https://www.devops-consulting.example.com'
-  FEED_DOMAIN: 'https://www.devops-consulting.example.com'
-  BUCKET_NAME: 'www.devops-consulting.example.com'
+  SITEURL: 'https://www.devops-consulting.link'
+  FEED_DOMAIN: 'https://www.devops-consulting.link'
+  BUCKET_NAME: 'www.devops-consulting.link'
   OUTPUT_PATH: 'output'
 jobs:
   build:

@@ -8,7 +8,7 @@ OUTPUTDIR=$(BASEDIR)/output
 CONFFILE=$(BASEDIR)/pelicanconf.py
 PUBLISHCONF=$(BASEDIR)/publishconf.py
 
-S3_BUCKET=www.devops-consulting.example.com
+S3_BUCKET=www.devops-consulting.link
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -24,6 +24,7 @@ help:
 	@echo 'Makefile for DevOps Consulting Pelican site                                '
 	@echo '                                                                           '
 	@echo 'Usage:                                                                     '
+	@echo '   make configure                      populate config from config.env      '
 	@echo '   make html                           (re)generate the web site           '
 	@echo '   make clean                          remove the generated files          '
 	@echo '   make regenerate                     regenerate files upon modification  '
@@ -35,6 +36,9 @@ help:
 	@echo '   make apply                          terraform apply                     '
 	@echo '   make remote-state                   bootstrap terraform remote state    '
 	@echo '                                                                           '
+
+configure:
+	$(BASEDIR)/scripts/configure.sh $(BASEDIR)/config.env
 
 html:
 	$(PELICAN) $(INPUTDIR) -o $(OUTPUTDIR) -s $(CONFFILE) $(PELICANOPTS)
@@ -68,4 +72,4 @@ apply: init
 remote-state:
 	make -C ./terraform/aws-remote-state/ init validate plan apply
 
-.PHONY: html help clean regenerate serve publish s3_upload init plan apply validate remote-state
+.PHONY: configure html help clean regenerate serve publish s3_upload init plan apply validate remote-state
